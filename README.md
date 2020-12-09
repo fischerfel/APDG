@@ -5,10 +5,10 @@ This tool generates an attributed program dependency graph from complete and inc
 
 The tool applies the following software:
 
-- WALA https://github.com/wala/WALA
-- Partial Program Analysis (PPA) https://www.sable.mcgill.ca/ppa/ppa_eclipse.html
+- WALA (https://github.com/wala/WALA)
+- Partial Program Analysis (PPA) (https://www.sable.mcgill.ca/ppa/ppa_eclipse.html)
 
-It needs to be compiled as a headless Eclipse plugin. Follow the tutorial (https://www.sable.mcgill.ca/ppa/ppa_eclipse.html) about how to setup and run these kind of plugins.
+It needs to be compiled as a headless Eclipse plugin. Follow the tutorial (https://www.sable.mcgill.ca/ppa/ppa_eclipse.html) which tells you how to setup and run these kind of plugins.
 
 ## Data
 We also provide a labeled set of Java source code samples that can be used with this tool (https://github.com/fischerfel/TUM-Crypto).
