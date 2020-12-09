@@ -1,5 +1,5 @@
 # APDG
-This tool generates an attributed program dependency graph from complete and incomplete Java source code. The graph is stored as a feature vector which can be used for graph representation learning frameworks. Please find our our embedding network for APDGs here (https://github.com/fischerfel/deep-learning-partial-programs/blob/main/README.md)
+This tool generates an attributed program dependency graph from complete and incomplete Java source code. The graph is stored as a feature vector which can be used for graph representation learning frameworks. Please find our embedding network for APDGs here (https://github.com/fischerfel/deep-learning-partial-programs/blob/main/README.md)
 
 ## Dependencies
 
