@@ -1,0 +1,14 @@
+sun\/security\/util\/Password
+java\/awt\/.*
+javax\/swing\/.*
+sun\/awt\/.*
+sun\/swing\/.*
+sun\/nio\/ch\/.*
+android\/widget\/.*
+android\/media\/.*
+android\/view\/.*
+android\/text\/.*
+android\/graphics\/.*
+android\/bluetooth\/.*
+android\/support\/.*
+com\/google\/android\/.*
