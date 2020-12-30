@@ -100,16 +100,12 @@ public class SemanticVectorCreator implements Runnable {
 				 * this method has a name that looks like an event handler...
 				 */
 				if (((m.isPublic() || m.isProtected()) && m.getName().toString().startsWith("on"))
-						/* ||Êhandlers.contains(m.getName().toString()) */
 						// ... or this method was declared as a custom handler
 						|| possibleOverrides.contains(m.getName().toString() + m.getDescriptor().toString())) {
 					// or this method is an override of an interface method
 					assert (c.getClassLoader().getReference().equals(ClassLoaderReference.Application));
 
 					entryPoints.add(new DefaultEntrypoint(m, cha));
-//					System.out.println("entrypoint added " + m.getName());
-
-//					 entryPoints.add(new SameReceiverEntrypoint(m, cha));
 				}
 			}
 		}
@@ -142,7 +138,6 @@ public class SemanticVectorCreator implements Runnable {
 		System.out.println("worker " + this.workerId + " building call graph");
 		CallGraph cg = builder.makeCallGraph(options, null);
 
-		// System.out.println(CallGraphStats.getStats(cg));
 		 System.out.println("worker " + this.workerId + " building pointer analysis");
 		PointerAnalysis pa = builder.getPointerAnalysis();
 
@@ -159,11 +154,9 @@ public class SemanticVectorCreator implements Runnable {
 			CGNode n = cgnIt.next();
 			PDG pdg = sdg.getPDG(n);
 			
-//			System.out.println("building semantic block");
 			SemanticBlock sb = new SemanticBlock(n, sdg, minSize);
 			sb.buildSemanticBlocks();
 			
-//			System.out.println("building semantic vectors");
 			SemanticVector sv = new SemanticVector(n, pdg/*
 														 * , this.methodNameSet,
 														 * this.valueSet,
@@ -175,33 +168,14 @@ public class SemanticVectorCreator implements Runnable {
 			int[] svArray;
 			try {
 				svArray = sv.buildSemanticVector(sb.getSemanticBlocks(), true, null, false, n);
-//				if (svArrayList != null && svArrayList.size() != 0)
-//					svio.writeToFile(svArrayList, true);
-
-				// for (int[] svArray : svArrayList) {
-				// List<Integer> svList = new ArrayList<Integer>();
-				// for (int i = 0; i < svArray.length; i++) {
-				// svList.add(svArray[i]);
-				// }
-				// System.out.println(svList);
-				// }
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-//				 e.printStackTrace();
+				 e.printStackTrace();
 			}
 		}
 	}
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		
-		// File[] appDirectory = null;
-
-		// create semantic vectors from apps
-		// if (this.appDirectoryAbsPath != null)
-		// appDirectory = new File(this.appDirectoryAbsPath).listFiles();
-
 		int errors = 0;
 
 		long astart = System.nanoTime();
@@ -222,7 +196,6 @@ public class SemanticVectorCreator implements Runnable {
 				System.out.println("worker " + this.workerId + " sv creation time: "
 						+ TimeUnit.NANOSECONDS.toMillis(stop - start));
 			} catch (Exception e) {
-//				e.printStackTrace();
 				errors++;
 				continue;
 			}

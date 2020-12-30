@@ -40,17 +40,10 @@ public class DescriptorSet {
 	private Set<String> typeNameSet;
 	
 	public DescriptorSet() {
-//		if (sdg == null)
-//			throw new IllegalArgumentException();
-		
 		this.pkgWhitelistMap = new HashMap<String, Integer>();
 		for (int i = 0; i < DescriptorSet.pkgWhitelist.length; i++) {
 			this.pkgWhitelistMap.put(pkgWhitelist[i], i);
 		}
-		
-//		this.methodNameSet = new HashSet<String>();
-//		this.packageNameSet = new HashSet<String>();
-//		this.typeNameSet = new HashSet<String>();
 	}
 	
 	private boolean isInPackageWhitelist(String pkgName) {
@@ -76,8 +69,6 @@ public class DescriptorSet {
 				SSAInstruction ssa = ns.getInstruction();
 				
 				if (ssa instanceof SSAAbstractInvokeInstruction) {
-//					System.out.println("add invocation info to set " + ssa.toString());
-
 					SSAAbstractInvokeInstruction aii = (SSAAbstractInvokeInstruction) ssa;
 					MethodReference mr = aii.getDeclaredTarget();
 					
@@ -114,31 +105,12 @@ public class DescriptorSet {
 						String pkgName = pkg.toString();
 						if (pkgName != null && pkgName.length() != 0 && this.isInPackageWhitelist(pkgName)) {
 							this.packageNameSet.add(pkgName);
-
-							// System.out.println(pkgName);
-							// System.out.println("\t" + mr.getSignature());
 						}
 					}
 				}
 			}
 		}
 	}
-	
-//	public void buildTypeNameSet(List<Statement> statements) {
-//		if (statements == null)
-//			throw new IllegalArgumentException();
-//		
-//		for (Statement s : statements) {
-//			if (s instanceof StatementWithInstructionIndex) {
-//				StatementWithInstructionIndex swii = (StatementWithInstructionIndex) s;
-//				if (swii.getInstruction() instanceof SSAAbstractInvokeInstruction) {
-//					SSAAbstractInvokeInstruction aii = (SSAAbstractInvokeInstruction) swii.getInstruction();
-//					
-//					aii.
-//				}
-//			}
-//		}
-//	}
 	
 	public void buildMethodAndTypeNameSet(List<ArrayList<Statement> > sbList) {
 		this.methodNameSet = new HashSet<String>();
@@ -149,20 +121,14 @@ public class DescriptorSet {
 		
 		for (ArrayList<Statement> sb : sbList)
 			for (Statement s : sb) {
-				// if (s.getKind().equals(Statement.Kind.NORMAL)) {
 				if (s instanceof StatementWithInstructionIndex) {
 					StatementWithInstructionIndex swii = (StatementWithInstructionIndex) s;
 					SSAInstruction ssa = swii.getInstruction();
 
 					if (ssa instanceof SSAAbstractInvokeInstruction) {
-						// System.out.println("add invocation info to set " +
-						// ssa.toString());
-
 						SSAAbstractInvokeInstruction aii = (SSAAbstractInvokeInstruction) ssa;
 						MethodReference mr = aii.getDeclaredTarget();
 
-						// always add method name to set for counting
-						// all its occurrences in the semantic vector
 						if (mr != null) {
 							String methodName = mr.getName().toString();
 							this.methodNameSet.add(methodName);
@@ -186,38 +152,6 @@ public class DescriptorSet {
 				}
 			}
 	}
-	
-//	public void buildMethodNameSet(List<CGNode> cgNodes, PDG pdg) {
-//		if (cgNodes == null)
-//			throw new IllegalArgumentException();
-//		
-//		for (CGNode n : cgNodes) {
-//			
-//			
-//			for (Iterator<Statement> pdgIt = pdg.iterator(); pdgIt.hasNext();) {
-//				Statement s = pdgIt.next();
-//				
-//				if (s.getKind().equals(Statement.Kind.NORMAL)) {
-//					NormalStatement ns = (NormalStatement) s;
-//					SSAInstruction ssa = ns.getInstruction();
-//					
-//					if (ssa instanceof SSAAbstractInvokeInstruction) {
-////						System.out.println("add invocation info to set " + ssa.toString());
-//
-//						SSAAbstractInvokeInstruction aii = (SSAAbstractInvokeInstruction) ssa;
-//						MethodReference mr = aii.getDeclaredTarget();
-//						
-//						// always add method name to set for counting 
-//						// all its occurrences in the semantic vector
-//						if (mr != null) {
-//							String methodName = mr.getName().toString();
-//							this.methodNameSet.add(methodName);
-//						}
-//					}
-//				}
-//			}
-//		}
-//	}
 	
 	public Map<String, Integer> getPkgWhitelistSet() {
 		return this.pkgWhitelistMap;

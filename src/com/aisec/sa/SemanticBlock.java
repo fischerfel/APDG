@@ -60,13 +60,10 @@ public class SemanticBlock {
 		HashSet<Statement> statementSet = new HashSet<Statement>(); 
 		HashSet<Statement> controlSet = new HashSet<Statement>();
 		
-//		System.out.println("iterating pdg");
 		for (Iterator<Statement> pdgIt = this.pdg.iterator(); pdgIt.hasNext();) {
 			Statement s = pdgIt.next();
-//			System.out.println(s);
 			
 			if (s.getKind().equals(Statement.Kind.NORMAL) 
-					/*|| s.getKind().equals(Statement.Kind.EXC_RET_CALLER)*/
 					|| s.getKind().equals(Statement.Kind.NORMAL_RET_CALLER)
 					|| s.getKind().equals(Statement.Kind.PARAM_CALLER)) {
 				statementSet.add(s);
@@ -108,26 +105,15 @@ public class SemanticBlock {
 				Statement s = bfsIt.next();
 
 				statementSet.remove(s);
-//				if (s.getKind() == Statement.Kind.NORMAL || s.getKind() == Statement.Kind.PHI
-//						|| s.getKind() == Statement.Kind.PI || s.getKind() == Statement.Kind.CATCH) {
-//					semanticBlockList.add(s);
-//				}
 				if (s.getKind().equals(Statement.Kind.NORMAL) 
-						/*|| s.getKind().equals(Statement.Kind.EXC_RET_CALLER)*/
 						|| s.getKind().equals(Statement.Kind.NORMAL_RET_CALLER)
 						|| s.getKind().equals(Statement.Kind.PARAM_CALLER)) {
 					semanticBlockList.add(s);
 					sBStatementSet.add(s);
-//					System.out.println("\tadd statement " + s.toString());
 				}
 				
 				assert(!controlSet.contains(s));
 				controlSet.add(s);
-//				if (controlSet.contains(s)) {
-//					System.err.println("control set already contains node");
-//				} else {
-//					controlSet.add(s);
-//				}
 			}
 			
 			// if there are missing edges between NORMAL invocation instruction
@@ -161,20 +147,7 @@ public class SemanticBlock {
 			// add semantic block to the semantic 
 			// blocks of the given pdg
 			if (semanticBlockList.size() >= this.minSize) {
-//				System.out.println("\tsemantic block list has size " + semanticBlockList.size());
 				this.semanticBlocks.add(semanticBlockList);
-				
-//				// TODO remove or create assertion/exception
-//				if (semanticBlockList.size() == 1) {
-//					if (this.pdg.getPredNodes(semanticBlockList.get(0)).hasNext()) {
-//						System.err.println("statement has pred nodes "
-//								+ semanticBlockList.get(0).toString());
-//					}
-//					if (this.pdg.getSuccNodes(semanticBlockList.get(0)).hasNext()) {
-//						System.err.println("statement has succ nodes "
-//								+ semanticBlockList.get(0).toString());
-//					}
-//				}
 			}
 		}
 	}

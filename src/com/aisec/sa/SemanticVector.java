@@ -199,67 +199,6 @@ public class SemanticVector {
 		this.buildStatementToInstructionMap(this.pdg);
 	}
 	
-//	/**
-//	 * 
-//	 * constructor of the semantic vector
-//	 *
-//	 * @param n
-//	 * @param pdg
-//	 * @param vs 
-//	 * @param mns 
-//	 */
-//	public SemanticVector(CGNode n, PDG pdg, MethodNameSet mns, ValueSet vs) {
-//		if (n == null || pdg == null || mns == null || vs == null) 
-//			throw new IllegalArgumentException();
-//		
-//		this.n = n;
-//		this.pdg = pdg;
-//		
-//		this.mns = mns;
-//		this.vs = vs;
-//		
-//		this.methodNameSet = mns.getMethodNameSet();
-//		this.valueSet = vs.getValueSet();
-//		
-//		this.semanticVectorList = new LinkedList<int[]>();
-//		
-//		this.buildStatementToInstructionMap(this.pdg);
-////		this.buildMethodIndexMap(this.methodNameSet);
-////		this.buildValueIndexMap(this.valueSet);
-//		this.methodNameToIndexMap = SAUtil.buildStringToIndexMap(this.methodNameSet);
-//		this.valueToIndexMap = SAUtil.buildStringToIndexMap(this.valueSet);
-//	}
-//	
-//	/**
-//	 * 
-//	 * @param n
-//	 * @param pdg
-//	 * @param methodNameSet
-//	 * @param methodNameToIndexMap
-//	 */
-//	public SemanticVector(CGNode n, PDG pdg, MethodNameSet mns, ValueSet vs,
-//			HashMap<String, Integer> methodNameToIndexMap, HashMap<String, Integer> valueToIndexMap) {
-//		if (n == null || pdg == null || mns == null || vs == null
-//				|| methodNameToIndexMap == null || valueToIndexMap == null) 
-//			throw new IllegalArgumentException();
-//		
-//		this.n = n;
-//		this.pdg = pdg;
-//		
-//		this.mns = mns;
-//		this.vs = vs;
-//		
-//		this.methodNameSet = mns.getMethodNameSet();
-//		this.valueSet = vs.getValueSet();
-//		
-//		this.methodNameToIndexMap = methodNameToIndexMap;
-//		this.valueToIndexMap = valueToIndexMap;
-//		
-//		this.semanticVectorList = new LinkedList<int[]>();
-//		
-//		this.buildStatementToInstructionMap(pdg);
-//	}
-	
 	public DescriptorSet getMethodNameSet() {
 		return mns;
 	}
@@ -368,7 +307,6 @@ public class SemanticVector {
 			throw new IllegalArgumentException();
 		
 		String signature = aii.getDeclaredTarget().getSignature();
-//		System.out.println(signature);
 		if (signature.contains("java.lang.StringBuilder")) {
 			throw new Exception("invalid instruction type for " + aii.toString());
 		}
@@ -416,14 +354,10 @@ public class SemanticVector {
 	}
 	
 	private void resolveHostnameVerFieldAccess(SSAInstruction ssa) {
-//		System.out.println("resolving field access");
 		if (ssa instanceof SSAFieldAccessInstruction) {
 			SSAFieldAccessInstruction fa = (SSAFieldAccessInstruction) ssa;
 			FieldReference fr = fa.getDeclaredField();
-//			System.out.println(fr.getName());
 			if (fr.getName().equals(Atom.findOrCreateAsciiAtom("ALLOW_ALL_HOSTNAME_VERIFIER"))) {
-//				System.out.println(fr.getName());
-				
 				this.hasAllowAllHost = true;
 			} else if (fr.getName().equals(Atom.findOrCreateAsciiAtom("STRICT_HOSTNAME_VERIFIER"))) {
 				
@@ -436,7 +370,6 @@ public class SemanticVector {
 		if (ssa instanceof SSANewInstruction) {
 			SSANewInstruction ni = (SSANewInstruction) ssa;
 			String type = ni.getConcreteType().getName().toString();
-//			System.out.println("new type: " + type);
 			if (type.contains("java/lang/StringBuilder")) {
 				throw new Exception("invalid instruction type for " + ni.toString());
 			}
@@ -472,8 +405,6 @@ public class SemanticVector {
 	private boolean incrementMethodCount(SSAInstruction ssa, int[] methodNameCount /*int[] typeRefVec*/) {
 		if (ssa == null /*|| typeRefVec == null*/)
 			throw new IllegalArgumentException();
-		
-//		System.out.println("increment type reference count for " +  ssa.toString());
 		
 		if (ssa instanceof SSAAbstractInvokeInstruction) {
 			SSAAbstractInvokeInstruction aii = (SSAAbstractInvokeInstruction) ssa;
@@ -512,7 +443,7 @@ public class SemanticVector {
 				return this.doIncrementValueCount(value, valueVec);
 			} 
 		} else { 
-//			System.out.println("\tno vnc " + sm);
+			System.out.println("\tno vnc " + sm);
 		}
 		return false;
 	}
@@ -527,7 +458,7 @@ public class SemanticVector {
 			throw new IllegalArgumentException();
 		
 		if (this.methodNameToIndexMap.keySet().contains(key)) {
-//			System.out.println("\tincrement count for " + key);
+			System.out.println("\tincrement count for " + key);
 			
 			int typeRefIndex = this.methodNameToIndexMap.get(key);
 			int typeRefCount = vec[typeRefIndex];
@@ -550,7 +481,7 @@ public class SemanticVector {
 			throw new IllegalArgumentException();
 		
 		if (this.valueToIndexMap.keySet().contains(key)) {
-//			System.out.println("\tincrement count for " + key);
+			System.out.println("\tincrement count for " + key);
 			
 			int typeRefIndex = this.valueToIndexMap.get(key);
 			int typeRefCount = vec[typeRefIndex];
@@ -599,8 +530,7 @@ public class SemanticVector {
 			if (outNodeDegree > maxOutDegree) 
 				maxOutDegreeVec[type] = outNodeDegree;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-//			e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 	
@@ -656,13 +586,12 @@ public class SemanticVector {
 		for(Iterator<Statement> pdgIt = pdg.iterator(); pdgIt.hasNext();) {
 			Statement s = pdgIt.next();
 			if (s.getKind().equals(Statement.Kind.NORMAL) 
-					/*|| s.getKind().equals(Statement.Kind.EXC_RET_CALLER)*/
 					|| s.getKind().equals(Statement.Kind.PARAM_CALLER) 
 					|| s.getKind().equals(Statement.Kind.NORMAL_RET_CALLER)) {
 				StatementWithInstructionIndex ns = (StatementWithInstructionIndex) s;
 				this.statementToInstrMap.put(s, ns.getInstruction());
 			} else {
-//				System.out.println("ignoring non normal statement " + s.toString());
+				System.out.println("ignoring non normal statement " + s.toString());
 			}
 		}
 	}
@@ -707,13 +636,8 @@ public class SemanticVector {
 	 * @throws Exception
 	 */
 	public int[] buildSemanticVector(List<ArrayList<Statement> > semanticBlockList, boolean isApp, Set<String> pkgNameSet, boolean isAdditional, CGNode n) throws Exception {
-//		System.out.println("semantic block list size : " + semanticBlockList.size());
-		
 		if (semanticBlockList == null /*|| semanticBlockList.size() == 0*/) 
 			throw new IllegalArgumentException("sbList empty");
-		
-//		if ((pkgNameSet == null || pkgNameSet.isEmpty()) && !isApp)
-//			throw new IllegalArgumentException("pkgNameSet missing");
 		
 		if (this.semanticVectorList.size() != 0)
 			this.semanticVectorList = new LinkedList<int[]>();
@@ -723,7 +647,6 @@ public class SemanticVector {
 		
 		int constInfoCount = 0;
 		int pkgCount = 0;
-//		int pkgCount = DescriptorSet.getPkgWhitelistLength();
 		
 		int[] statementTypeVec = new int[SemanticVector.INSTR_TYPE_COUNT];
 		int[] maxOutDegreeVec = new int[SemanticVector.INSTR_TYPE_COUNT];
@@ -733,55 +656,16 @@ public class SemanticVector {
 		int semanticVecLength = instructionTypeSize + pkgCount +  constInfoCount;
 		int[] semanticVec = new int[semanticVecLength];
 		
-//		System.out.println(n.getMethod().getSignature());
-		
 		for (Iterator<ArrayList<Statement>> smlIt = semanticBlockList.iterator(); smlIt.hasNext();) {
 			List<Statement> sml = smlIt.next();
-			
-//			for (Statement s : sml) {
-//				System.out.println("\t" + s);
-//			}
-//			System.out.println("semantic block size: " + sml.size());
-			
-//			DescriptorSet ds = new DescriptorSet();
-//			Map<String, Integer> packageToIndexMap = ds.getPkgWhitelistSet();
-//			Set<String> packageSet = new HashSet<String>();
-//
-//			if (isApp && !isAdditional) {
-//				ds.buildPackageNameSet(sml);
-//				packageSet = ds.getPackageNameSet();
-//			} else if (!isAdditional) {
-//				packageSet = pkgNameSet;
-//			}
-////			System.out.println("package set: " + packageSet);
-//			
-//			// critical since we filter out methods which do not use whitelisted pkgs
-//			String signature = n.getMethod().getSignature();
-//			if (packageSet.isEmpty() && !isAdditional 
-//					&& !signature.contains("checkClientTrusted") && !signature.contains("checkServerTrusted") && !signature.contains("getAcceptedIssuers")) {
-////				System.err.println("Continue with next block");
-//				continue;
-//			} else {
-////				System.out.println("found package");
-//				semanticVec = new int[semanticVecLength];
-////				System.out.println("semantic block contains whitelisted pkg");
-////				System.out.println(packageSet);
-//			}
-			
-//			System.out.println("building new semantic vector");	
-//			semanticVec = new int[semanticVecLength];
 			
 			boolean foundInstructionType = false;
 			for (Iterator<Statement> smIt = sml.iterator(); smIt.hasNext();) {
 				Statement sm = smIt.next();
-//				System.out.println("\t" + sm);
 				
 				if (sm.getKind().equals(Statement.Kind.NORMAL) 
-						/*|| sm.getKind().equals(Statement.Kind.EXC_RET_CALLER)*/	// TODO delete condition since we do not store EXC_RET_CALLER anymore
 						|| sm.getKind().equals(Statement.Kind.PARAM_CALLER) 
 						|| sm.getKind().equals(Statement.Kind.NORMAL_RET_CALLER)) {
-//					System.out.println("\t" + ((StatementWithInstructionIndex) sm).getInstruction().toString());
-					
 					SSAInstruction ssa = this.statementToInstrMap.get(sm);
 					if (ssa == null) {
 						// TODO this quits the sv creation for the given app, catch exception earlier
@@ -792,33 +676,16 @@ public class SemanticVector {
 					if (this.incrementInstructionTypeCount(ssa, statementTypeVec)) {
 						// critical since this decides wether to include a sb in the sv
 						foundInstructionType = true;
-//						System.out.println("\t\tFound type");
 					} else {
-//						System.out.println("\t\tType not found for " + ssa.getClass().getName());
+						System.out.println("\t\tType not found for " + ssa.getClass().getName());
 					}
 					this.updateMaxOutDegreeVec(pdg, sm, ssa, maxOutDegreeVec);
 				} 
 			}
 			
-//			IR ir = n.getIR();
-//			ValueSet vs = new ValueSet();
-//			vs.buildValueSetFromStatements(sml, ir);
-//			this.valueSet = vs.getValueSet();
-			
-//			int maxInt = vs.getMaxInt();
-//			int maxStringLength = vs.getMaxStringLength();
-			
-//			int intConstantCount = vs.getIntConstantCount();
-//			int stringConstantCount = vs.getStringConstantCount();
-			
 			if (!(foundInstructionType /* || foundMethodName || foundConstValue*/)) {
-//				System.out.println("nothing found, continue");
 				continue;
 			} else {
-//				System.out.println("semantic block");
-//				for (Statement s : sml) {
-//					System.out.println("\t" + s.toString());
-//				}
 			}			
 			for (int i = 0; i < semanticVec.length; i++) {
 				if (i < statementTypeVec.length)
@@ -831,29 +698,6 @@ public class SemanticVector {
 					semanticVec[i] = maxOutDegreeVec[j];
 			}
 			
-//			for (String pkgName : packageSet) {
-//				Integer index = packageToIndexMap.get(pkgName);
-//				if (index != null)
-//					if (instructionTypeSize + index < semanticVecLength) {
-//						semanticVec[instructionTypeSize + index] = 1;
-////						System.out.println("setting package index: " + (instructionTypeSize + index));
-//					}
-//				
-////				System.out.println("set 1 at " + index + " for " + pkgName);
-//			}
-			
-			// so ugly
-//			semanticVec[semanticVecLength - constInfoCount] = maxInt;
-//			semanticVec[semanticVecLength - constInfoCount + 1] = maxStringLength;
-			
-//			int currIntConstCount = semanticVec[semanticVecLength - constInfoCount];
-//			int currStringConstCount = semanticVec[semanticVecLength - constInfoCount + 1];
-//			semanticVec[semanticVecLength - constInfoCount] = currIntConstCount + intConstantCount;
-//			semanticVec[semanticVecLength - constInfoCount + 1] = currStringConstCount  + stringConstantCount;
-			
-//			this.semanticVectorList.add(semanticVec);
-		}
-		
 		return semanticVec;
 	}
 	

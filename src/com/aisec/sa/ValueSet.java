@@ -20,8 +20,6 @@ public class ValueSet {
 	
 	private static String VN_VALUE_SEPARATOR = "#";
 	
-//	private final CallGraph cg;
-	
 	private Set<String> valueSet;
 	
 	private int maxInt;
@@ -42,7 +40,7 @@ public class ValueSet {
 			if (seperatorIndex >= 0 && seperatorIndex < valueString.length()) {
 				return valueString.substring(seperatorIndex + 1);
 			} else {
-//				System.out.println("variable number, value seperator not found " + valueString);
+				System.out.println("variable number, value seperator not found " + valueString);
 			}
 		}
 
@@ -56,16 +54,11 @@ public class ValueSet {
 		SymbolTable st = ir.getSymbolTable();
 		for (Statement s : statements) {
 			if (s instanceof ValueNumberCarrier) {
-//				System.out.println("\tis value number carrier ");
-				
 				ValueNumberCarrier vnc = (ValueNumberCarrier) s;
 				int vn = vnc.getValueNumber();
-//				System.out.println("\thas vn " + vn);
 				
 				String value = getValueFromValueString(st.getValueString(vn));
 				if (value != null && value.length() != 0 && !value.equals("null")) {
-//					System.out.println("\tvalue " + value);
-//					System.out.println("\tfrom " +  s.toString());
 					if (st.isIntegerConstant(vn)) {
 						this.intConstantCount++;
 						
@@ -90,13 +83,10 @@ public class ValueSet {
 				SSAInstruction ssa = swii.getInstruction();
 				
 				int defVarCount = ssa.getNumberOfDefs();
-//				System.out.println("\tswii has " + defVarCount + " defined vars");
 				for(int i = 0; i < defVarCount; i++) {
 					int vn = ssa.getDef(i);
-//					System.out.println("\tvalue string from swii " + st.getValueString(vn));
 					
 					if (st.isConstant(vn)) {
-//						System.out.println("\tfound constant");
 						String value = null;
 						
 						if (st.isIntegerConstant(vn)) {
@@ -116,14 +106,12 @@ public class ValueSet {
 						}
 						
 						if (value != null && value.length() != 0 && !value.equals("null")) {
-//							System.out.println("\t\tvalue " + value);
-//							System.out.println("\t\tfrom " +  s.toString());
 							this.valueSet.add(value);
 						}
 					}
 				}
 			} else {
-//				System.out.println("\tno vnc");
+				System.out.println("\tno vnc");
 			}
 		}
 		
